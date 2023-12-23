@@ -10,7 +10,6 @@ def main():
     reference_files = ["data/ref_1_MTmedicine.txt"]  # Список файлов с эталонными переводами
     candidate_files = ["data/hyp_1_1_MTmedicineyandex.txt", "data/hyp_1_2_MTmedicinedeep.txt"]
     scorer = BLEUScorer(reference_files, candidate_files, logger)
-
     bleu_scores = scorer.calculate_bleu_score()
 
     for translation_id, score in bleu_scores.items():

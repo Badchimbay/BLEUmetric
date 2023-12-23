@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Расчет BLEU-балла</title>
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .form-input {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <form method="post" action="/process" enctype="multipart/form-data">
+            <div>
+                <label for="textRef">Введите эталонный текст:</label>
+                <textarea id="textRef" name="textRef"></textarea>
+
+                <label for="fileRef">Или загрузите эталонный файл:</label>
+                <input type="file" id="fileRef" name="fileRef" multiple>
+            </div>
+
+            <div>
+                <label for="textCand">Введите текст кандидата:</label>
+                <textarea id="textCand" name="textCand"></textarea>
+
+                <label for="fileCand">Или загрузите файл кандидата:</label>
+                <input type="file" id="fileCand" name="fileCand" multiple>
+            </div>
+
+            <input type="submit" value="Рассчитать">
+        </form>
+    </div>
+</body>
+</html>

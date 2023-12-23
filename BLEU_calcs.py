@@ -1,3 +1,4 @@
+import os.path
 from collections import Counter
 from nltk.util import ngrams
 from nltk import word_tokenize
@@ -6,12 +7,13 @@ from datetime import datetime
 
 
 class BLEUScorer:
-    def __init__(self, reference_files, candidate_files, logger):
+    def __init__(self, reference_texts, candidate_texts, logger):
         self.logger = logger
         self.start_time = datetime.now()
-        self.ref_sources, self.machine_translation = ",".join(reference_files), ",".join(candidate_files)
-        self.candidates = [self.file_loader(file) for file in candidate_files]
-        self.references = [self.file_loader(file) for file in reference_files]
+        self.ref_sources = ",".join(reference_texts) if isinstance(reference_texts, list) else [reference_texts]
+        self.machine_translation = ",".join(candidate_texts) if isinstance(candidate_texts, list) else [candidate_texts]
+        self.candidates = [self.process_input(text) for text in candidate_texts]
+        self.references = [self.process_input(text) for text in reference_texts]
 
     def calculate_bleu_score(self):
         """Вычисляет BLEU-балл для кандидата по сравнению с несколькими эталонными переводами."""
@@ -36,13 +38,16 @@ class BLEUScorer:
             raise e
 
     @staticmethod
-    def file_loader(file_path):
+    def process_input(input_data):
         """Загружает эталонный перевод из файла."""
-        try:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                return file.read().strip()
-        except Exception as e:
-            raise e
+        if os.path.isfile(input_data):
+            try:
+                with open(input_data, 'r', encoding='utf-8') as file:
+                    return file.read().strip()
+            except Exception as e:
+                raise e
+        else:
+            return input_data
 
     @staticmethod
     def calculate_individual_bleu(candidate, references):
@@ -71,7 +76,10 @@ class BLEUScorer:
                 precisions.append(overlap / len(candidate_ngrams))
 
         # Расчет геометрического среднего
-        geometric_mean = math.exp(sum(map(math.log, precisions)) / 4)
+        if 0.0 in precisions:
+            geometric_mean = 0.0
+        else:
+            geometric_mean = math.exp(sum(map(math.log, precisions)) / 4)
 
         # Штраф за краткость
         len_candidate = len(candidate_tokens)
