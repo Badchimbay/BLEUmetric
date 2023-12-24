@@ -3,40 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>Расчет BLEU-балла</title>
-    <style>
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script>
+        async function send(form) {
+            let response = await fetch('/process', {
+              method: 'POST',
+              body: new FormData(form)
+            });
+
+            if (response.status == 200) {
+              let result = await response.text();
+              document.getElementById('result').innerHTML = result
+            } else {
+              let error = await response.text();
+              alert('Ошибка: ' + response.status + '\n' + error)
+            }
         }
-        .form-input {
-            margin: 5px;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <div class="center">
-        <form method="post" action="/process" enctype="multipart/form-data">
-            <div>
-                <label for="textRef">Введите эталонный текст:</label>
-                <textarea id="textRef" name="textRef"></textarea>
-
-                <label for="fileRef">Или загрузите эталонный файл:</label>
-                <input type="file" id="fileRef" name="fileRef" multiple>
-            </div>
-
-            <div>
-                <label for="textCand">Введите текст кандидата:</label>
-                <textarea id="textCand" name="textCand"></textarea>
-
-                <label for="fileCand">Или загрузите файл кандидата:</label>
-                <input type="file" id="fileCand" name="fileCand" multiple>
-            </div>
-
-            <input type="submit" value="Рассчитать">
-        </form>
+<nav class="navbar bg-body-tertiary" style="height: 68px">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><button class="btn" data-bs-toggle="modal" data-bs-target="#menu">
+            <i class="bi bi-list"></i>
+        </button>BLEU Calculator</span>
     </div>
+</nav>
+<div class="container text-center" style="width: 80%; margin-top: 70px">
+    <form onsubmit="send(this); return false">
+        <div class="row">
+            <div class="col">
+                <textarea id="textRef" name="textRef" class="form-control" rows="7"
+                          placeholder="Введите эталонный перевод или загрузите файл"></textarea>
+
+                <input class="form-control mt-2" type="file" id="fileRef" name="fileRef" multiple>
+            </div>
+
+            <div class="col">
+                <textarea id="textCand" name="textCand" class="form-control" rows="7"
+                          placeholder="Введите машинный перевод или загрузите файл"></textarea>
+
+                <input class="form-control mt-2" type="file" id="fileCand" name="fileCand" multiple>
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <input class="btn btn-secondary col-4 mt-3" type="submit" value="Рассчитать">
+        </div>
+        <div class="row justify-content-md-center">
+            <textarea id="result" class="form-control mt-3 shadow-none" readonly rows="5"></textarea>
+        </div>
+        <div class="modal fade left" tabindex="-1" id="menu" role="dialog">
+            <div class="modal-dialog" style="max-width: none">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">BLEU Calculator</h4>
+                    </div>
+                    <div class="modal-body">INFO</div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
 </html>

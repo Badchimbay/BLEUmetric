@@ -63,7 +63,7 @@ def process_input():
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-    return f'Результат: {bleu_scores}'
+    return bleu_scores
 
 
 if __name__ == '__main__':

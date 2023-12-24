@@ -10,8 +10,8 @@ class BLEUScorer:
     def __init__(self, reference_texts, candidate_texts, logger):
         self.logger = logger
         self.start_time = datetime.now()
-        self.ref_sources = ",".join(reference_texts) if isinstance(reference_texts, list) else [reference_texts]
-        self.machine_translation = ",".join(candidate_texts) if isinstance(candidate_texts, list) else [candidate_texts]
+        self.ref_sources = ",".join([os.path.basename(text) for text in reference_texts]) if isinstance(reference_texts, list) else os.path.basename(reference_texts)
+        self.machine_translation = ",".join([os.path.basename(text) for text in candidate_texts]) if isinstance(candidate_texts, list) else os.path.basename(candidate_texts)
         self.candidates = [self.process_input(text) for text in candidate_texts]
         self.references = [self.process_input(text) for text in reference_texts]
 
@@ -23,7 +23,7 @@ class BLEUScorer:
                 candidate_scores, precisions, brevity_penalty, ratio, candidate_len, reference_len = \
                     [self.calculate_individual_bleu(candidate, [ref]) for ref in self.references][0]
                 unigram, bigram, trigram, quadram = [x * 100 for x in precisions]
-                bleu_scores[f'Перевод {i + 1}'] = (
+                bleu_scores[f"{self.machine_translation.split(',')[i]}"] = (
                     f'BLEU = {candidate_scores * 100:.2f}, {unigram:.1f}/{bigram:.1f}/{trigram:.1f}/{quadram:.1f} '
                     f'(BP = {brevity_penalty:.3f}, ratio = {ratio:.3f}, hyp_len = {candidate_len}, ref_len = {reference_len})')
             end_time = datetime.now()
