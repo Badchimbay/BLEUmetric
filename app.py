@@ -63,7 +63,13 @@ def process_input():
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-    return bleu_scores
+    output_result = "\n".join(f"{key}: {value}" for key, value in bleu_scores.items())
+    return output_result
+
+
+@app.route('/info')
+def info():
+    return render_template("description.html")
 
 
 if __name__ == '__main__':

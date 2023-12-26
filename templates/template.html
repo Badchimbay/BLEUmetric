@@ -24,12 +24,15 @@
         }
     </script>
 </head>
-<body>
+<body style="background-color: #D8DCD6">
 <nav class="navbar bg-body-tertiary" style="height: 68px">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1"><button class="btn" data-bs-toggle="modal" data-bs-target="#menu">
-            <i class="bi bi-list"></i>
-        </button>BLEU Calculator</span>
+        <span class="navbar-brand mb-0 h1">
+            <button class="btn" data-bs-toggle="modal" data-bs-target="#menu">
+                <i class="bi bi-list"></i>
+            </button>
+            <a class="navbar-brand" href="/" style="font-size: 24px">BLEU Calculator</a>
+        </span>
     </div>
 </nav>
 <div class="container text-center" style="width: 80%; margin-top: 70px">
@@ -61,7 +64,9 @@
                     <div class="modal-header">
                         <h4 class="modal-title">BLEU Calculator</h4>
                     </div>
-                    <div class="modal-body">INFO</div>
+                    <div class="modal-body">
+                        <a class="btn" href="/info" style="font-size: 18px">О калькуляторе BLEU</a>
+                    </div>
                 </div>
             </div>
         </div>
