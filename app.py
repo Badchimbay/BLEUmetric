@@ -63,7 +63,10 @@ def process_input():
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-    output_result = "\n".join(f"{key}: {value}" for key, value in bleu_scores.items())
+    def format_key(key):
+        return (key[:30] + '...') if len(key) > 30 else key
+
+    output_result = "\n".join(f"{format_key(key)}: {value}" for key, value in bleu_scores.items())
     return output_result
 
 
